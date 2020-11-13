@@ -51,35 +51,17 @@ public class Main {
         cmdLineOptions.put("--password", "HTTP authorization password");
 
         // Set up necessary directory paths
-        String programDir = System.getenv("HOME") + "/.QTDownloader";
-        String programTmpDir = programDir + "/tmp/";
+        String programDir = System.getProperty("user.home") + File.separator+".QTDownloader";
+        String programTmpDir = programDir + File.separator+"tmp";
 
         // Create the tmp folder if it doesn't exist
-        File tmpDir = new File(programDir + "/tmp/");
+        File tmpDir = new File(programTmpDir);
 
-        if (!tmpDir.exists()) {
-            boolean mkdirSuccess = false;
-
-            try {
-                mkdirSuccess = tmpDir.mkdir();
-            } catch (SecurityException se) {
-                System.err.println(se.getMessage());
-                System.exit(0);
-            }
-
-            if (!mkdirSuccess) {
-                programTmpDir = programDir;
-            }
-        }
-
-        if (System.getProperty("os.name").toLowerCase().contains("windows")) {
-            programDir = programDir.replace("/", "\\");
-            programTmpDir = programTmpDir.replace("/", "\\");
-        }
+        tmpDir.mkdirs();
 
         PROGRAM_DIR = programDir;
         PROGRAM_TEMP_DIR = programTmpDir;
-        
+
         // Set up database path
         DATABASE_FILE = "qtdb";
         DATABASE_PATH = "jdbc:h2:" + programDir + "\\" + DATABASE_FILE;
